@@ -1,15 +1,13 @@
-# SpamSms
-Spam sms (UPDATE)
+# SMS GRATIS
+Tool untuk kirim sms gratis menggunakan termux
 
-# How To Use
-$ pkg update && pkg upgrade<br>
-$ pkg install python<br>
-$ pkg install git<br>
-$ git clone https://github.com/KANG-NEWBIE/SpamSms<br>
-$ pip install requests mechanize bs4<br>
-$ cd SpamSms<br>
-$ python main.py
+### INSTALASI
+```
+$ pkg install git python
+$ pip install requests
+$ git clone https://github.com/N74NK/sms
+$ cd sms
+$ python sms.py
+```
 
-# NOTE
-selalu ingat kata pepatah saya yang berbunyi "BANGSAD KAO" sekian dan terima gaji
-
+Thanks to Xractz - IndoSec

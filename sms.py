@@ -1,45 +1,40 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-# Coded by KANG-NEWBIE
-"""
-ngapai bosq? mau recode?
-tinggal pake aja susah amat sih?!
-"""
-from multiprocessing.pool import ThreadPool
+# Xractz
+# IndoSec
+
+from requests import Session
+import re, sys
+s = Session()
+
 try:
-	import os, time, requests, sys
-except ModuleNotFoundError:
-	print("\nSepertinya module requests BELUM Di Install")
-	print("$ pip install requests\n")
-	exit()
+	print("\n\n * SMS Gratis by Xractz - IndoSec\n * Gunakan kode negara (ex: 628xxxxx)\n")
+	no = int(input(" Nomor : "))
+	msg = input(" Pesan : ")
+except:
+	print("\n\t* Cek nomermu atau pesanmu! *")
+	sys.exit()
 
-banner=("""\033[1;36m
-     _  _
-   _| || |_  \033[1;32mSEPAM ESEMES (UPDATE)\033[1;36m
-  |_  ..  _|
-  |_      _| \033[1;31mContact=>https://t.me/kang_nuubi\033[1;36m
-    |_||_|   \033[1;31mGithub=>https://github.com/KANG-NEWBIE
-""")
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Linux; Android 4.4.2; Nexus 4 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.114 Mobile Safari/537.36',
+    'Referer': 'http://sms.payuterus.biz/alpha/'
+}
 
-os.system('clear')
-print(banner)
-no = input("\033[1;37mMassukan Nomor Target =>\033[1;32m")
-tot = int(input("\033[1;37mJumlah Spam =>\033[1;32m"))
-spam = {'msisdn':no}
-idk = '200'
-def main(arg):
-	try:
-		r = requests.post('https://registrasi.tri.co.id/daftar/generateOTP?',data = spam)
-#		print(r.text)
-		if str(idk) in str(r.text):
-			print("\033[1;32m[+] SUKSES")
-		else:
-			print(r.text)
-			print("\033[1;31m[-] GAGAL")
-	except: pass
+bypass = s.get("http://sms.payuterus.biz/alpha/?a=keluar", headers=headers).text
+key = re.findall(r'value="(\d+)"', bypass)[0]
+jml = re.findall(r'<span>(.*?) = </span>', bypass)[0]
+captcha = eval(jml.replace("x", "*").replace(":", "/"))
 
-jobs = []
-for x in range(tot):
-    jobs.append(x)
-p=ThreadPool(10)
-p.map(main,jobs)
+data = {
+	'nohp':no,
+	'pesan':msg,
+	'captcha':captcha,
+	'key':key
+}
+
+send = s.post("http://sms.payuterus.biz/alpha/send.php", headers=headers, data=data).text
+
+if 'SMS Gratis Telah Dikirim' in send:
+	print(f"\n  [ Pengiriman sukses ]\n  [ {no} : {msg} ]\n")
+elif 'MAAF....!' in send:
+	print("\n  [ Mohon tunggu 15 menit untuk mengirim pesan yg sama ]\n")
+else:
+	print("\n  [ Pengiriman gagal ]\n")
